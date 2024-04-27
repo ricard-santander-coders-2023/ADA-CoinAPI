@@ -5,6 +5,7 @@ import com.dev.api.adacoinapi.service.QuoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @RestController
@@ -21,5 +22,12 @@ public class QuoteController {
     @GetMapping("/{currencies}")
     public Map<String, CurrencyQuote> getQuotes(@PathVariable String currencies) {
         return quoteService.getQuotes(currencies);
+    }
+
+    @GetMapping("/convert/{fromCurrency}/{toCurrency}/{amount}")
+    public BigDecimal convertCurrency(@PathVariable String fromCurrency,
+                                      @PathVariable String toCurrency,
+                                      @PathVariable BigDecimal amount) {
+        return quoteService.convertCurrency(fromCurrency, toCurrency, amount);
     }
 }
