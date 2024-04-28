@@ -3,6 +3,7 @@ package com.dev.api.adacoinapi.dto;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Data
@@ -17,27 +18,31 @@ public class CurrencyQuote {
     private String name;
 
     @JsonAlias({"high"})
-    private String high;
+    private BigDecimal high;
 
     @JsonAlias({"low"})
-    private String low;
+    private BigDecimal low;
 
     @JsonAlias({"varBid"})
-    private String varBid;
+    private BigDecimal varBid;
 
     @JsonAlias({"pctChange"})
     private String pctChange;
 
     @JsonAlias({"bid"})
-    private String bid;
+    private BigDecimal bid;
 
     @JsonAlias({"ask"})
-    private String ask;
+    private BigDecimal ask;
 
     @JsonAlias({"timestamp"})
     private String timestamp;
 
     @JsonAlias({"create_date"})
     private String createDate;
+
+    public BigDecimal convert(BigDecimal amount) {
+        return amount.multiply(bid);
+    }
 
 }
