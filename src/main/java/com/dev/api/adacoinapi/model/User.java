@@ -19,5 +19,7 @@ public class User {
   @Column(nullable = false)
   private String password;
 
-  @OneToMany private List<CurrencyQuote> favoriteCurrencies;
+
+  @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+  private List<CurrencyQuote> favoriteCurrencies;
 }

@@ -20,20 +20,22 @@ public class QuoteService {
 
     private final RestTemplate restTemplate;
 
+    private final CurrencyQuoteRepository currencyQuoteRepository;
+
     @Autowired
-    public QuoteService(RestTemplate restTemplate) {
+    public QuoteService(RestTemplate restTemplate, CurrencyQuoteRepository currencyQuoteRepository) {
         this.restTemplate = restTemplate;
-
+        this.currencyQuoteRepository = currencyQuoteRepository;
     }
-
-
 
     public Map<String, CurrencyQuote> getRealTimeQuotes(List<String> currencies) {
         String currenciesParam = String.join(",", currencies);
-        return getQuotes(currenciesParam);
+        Map<String, CurrencyQuote> quotes = getQuotes(currenciesParam);
+        return quotes;
     }
 
-    public CurrencyConversionDTO convertCurrency(String fromCurrency, String toCurrency, BigDecimal amount) {
+    public CurrencyConversionDTO convertCurrency(
+        String fromCurrency, String toCurrency, BigDecimal amount) {
         String currencies = fromCurrency + "-" + toCurrency;
         Map<String, CurrencyQuote> response = getQuotes(currencies);
         CurrencyQuote quote = response.get(fromCurrency + toCurrency);
@@ -43,15 +45,21 @@ public class QuoteService {
 
     public Map<String, CurrencyQuote> getQuotes(String currencies) {
         String url = "https://economia.awesomeapi.com.br/last/" + currencies;
-        ResponseEntity<Map<String, CurrencyQuote>> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<Map<String, CurrencyQuote>>() {}
-        );
-        return response.getBody();
+        ResponseEntity<Map<String, CurrencyQuote>> response =
+                restTemplate.exchange(
+                        url,
+                        HttpMethod.GET,
+                        null,
+                        new ParameterizedTypeReference<Map<String, CurrencyQuote>>() {});
+        Map<String, CurrencyQuote> quotes = response.getBody();
+        if (quotes != null) {
+            quotes.forEach((key, quote) -> {
+                quote.setCurrencyCode(key.split("-")[0]);
+                quote.setCurrencyName(key);
+                currencyQuoteRepository.save(quote);
+            });
+        }
+        return quotes;
     }
-
-
 
 }

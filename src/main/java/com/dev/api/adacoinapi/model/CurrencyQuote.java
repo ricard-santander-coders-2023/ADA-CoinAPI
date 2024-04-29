@@ -29,4 +29,9 @@ public class CurrencyQuote {
 
     @Column(nullable = false)
     private Instant timestamp;
+
+    @ManyToOne
+    @JoinColumn(name = "users_id")
+    private User user;
+
 }

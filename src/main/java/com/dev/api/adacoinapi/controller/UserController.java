@@ -1,5 +1,6 @@
 package com.dev.api.adacoinapi.controller;
 
+import com.dev.api.adacoinapi.dto.UserDTO;
 import com.dev.api.adacoinapi.model.User;
 import com.dev.api.adacoinapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,9 @@ public class UserController {
   }
 
   @PostMapping("/{userId}/favoriteCurrencies/{quoteId}")
-  public User addFavoriteCurrency(@PathVariable Long userId, @PathVariable String quoteId) {
-    return userService.addFavoriteCurrency(userId, quoteId);
+  public ResponseEntity<UserDTO> addFavoriteCurrency(@PathVariable Long userId, @PathVariable Long quoteId) {
+    User user = userService.addFavoriteCurrency(userId, quoteId);
+    UserDTO userDTO = new UserDTO(user);
+    return ResponseEntity.ok(userDTO);
   }
 }
