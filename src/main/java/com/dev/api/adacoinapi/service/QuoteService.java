@@ -2,6 +2,7 @@ package com.dev.api.adacoinapi.service;
 
 import com.dev.api.adacoinapi.dto.CurrencyConversionDTO;
 import com.dev.api.adacoinapi.model.CurrencyQuote;
+import com.dev.api.adacoinapi.repository.CurrencyQuoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -17,10 +18,12 @@ import java.util.Map;
 public class QuoteService {
 
     private final RestTemplate restTemplate;
+    private final CurrencyQuoteRepository currencyQuoteRepository;
 
     @Autowired
-    public QuoteService(RestTemplate restTemplate) {
+    public QuoteService(RestTemplate restTemplate, CurrencyQuoteRepository currencyQuoteRepository) {
         this.restTemplate = restTemplate;
+        this.currencyQuoteRepository = currencyQuoteRepository;
     }
 
     public Map<String, CurrencyQuote> getRealTimeQuotes(List<String> currencies) {
