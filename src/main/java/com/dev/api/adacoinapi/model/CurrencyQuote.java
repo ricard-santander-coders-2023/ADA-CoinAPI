@@ -8,6 +8,7 @@ import java.time.Instant;
 
 @Data
 @Entity
+@Table(name = "currency_quote")
 public class CurrencyQuote {
 
     @Id
