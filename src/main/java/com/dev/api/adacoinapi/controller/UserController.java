@@ -10,17 +10,22 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+  @Autowired private UserService userService;
 
-    public ResponseEntity<User> createUser(@RequestParam String username, @RequestParam String password) {
-        User user = userService.createUser(username, password);
-        return ResponseEntity.ok(user);
-    }
+  public ResponseEntity<User> createUser(
+      @RequestParam String username, @RequestParam String password) {
+    User user = userService.createUser(username, password);
+    return ResponseEntity.ok(user);
+  }
 
-    @PostMapping("/create")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User createdUser = userService.createUser(user);
-        return ResponseEntity.ok(createdUser);
-    }
+  @PostMapping("/create")
+  public ResponseEntity<User> createUser(@RequestBody User user) {
+    User createdUser = userService.createUser(user);
+    return ResponseEntity.ok(createdUser);
+  }
+
+  @PostMapping("/{userId}/favoriteCurrencies/{quoteId}")
+  public User addFavoriteCurrency(@PathVariable Long userId, @PathVariable String quoteId) {
+    return userService.addFavoriteCurrency(userId, quoteId);
+  }
 }
