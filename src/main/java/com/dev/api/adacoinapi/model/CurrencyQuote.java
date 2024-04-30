@@ -31,12 +31,6 @@ public class CurrencyQuote {
     @Column(nullable = false)
     private Instant timestamp;
 
-    @JsonProperty("code")
-    private String code;
-
-    @JsonProperty("name")
-    private String name;
-
     @ManyToOne
     @JoinColumn(name = "users_id")
     private User user;

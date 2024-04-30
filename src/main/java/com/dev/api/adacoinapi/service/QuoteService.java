@@ -61,7 +61,7 @@ public class QuoteService {
                 quote.setCurrencyName((String) nestedMap.get("name"));
                 quote.setBid(new BigDecimal((String) nestedMap.get("bid")));
                 quote.setAsk(new BigDecimal((String) nestedMap.get("ask")));
-                quote.setTimestamp(Instant.now());  // Simplification, set the current time or parse timestamp
+                quote.setTimestamp(Instant.now());
                 quotes.put(key, quote);
                 currencyQuoteRepository.save(quote);
             });
