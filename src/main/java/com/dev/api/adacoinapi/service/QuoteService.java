@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,21 +46,26 @@ public class QuoteService {
 
     public Map<String, CurrencyQuote> getQuotes(String currencies) {
         String url = "https://economia.awesomeapi.com.br/last/" + currencies;
-        ResponseEntity<Map<String, CurrencyQuote>> response =
+        ResponseEntity<Map<String, Map<String, Object>>> response =
                 restTemplate.exchange(
                         url,
                         HttpMethod.GET,
                         null,
-                        new ParameterizedTypeReference<Map<String, CurrencyQuote>>() {});
-        Map<String, CurrencyQuote> quotes = response.getBody();
-        if (quotes != null) {
-            quotes.forEach((key, quote) -> {
-                quote.setCurrencyCode(key.split("-")[0]);
-                quote.setCurrencyName(key);
+                        new ParameterizedTypeReference<Map<String, Map<String, Object>>>() {});
+
+        Map<String, CurrencyQuote> quotes = new HashMap<>();
+        if (response.getBody() != null) {
+            response.getBody().forEach((key, nestedMap) -> {
+                CurrencyQuote quote = new CurrencyQuote();
+                quote.setCurrencyCode((String) nestedMap.get("code"));
+                quote.setCurrencyName((String) nestedMap.get("name"));
+                quote.setBid(new BigDecimal((String) nestedMap.get("bid")));
+                quote.setAsk(new BigDecimal((String) nestedMap.get("ask")));
+                quote.setTimestamp(Instant.now());  // Simplification, set the current time or parse timestamp
+                quotes.put(key, quote);
                 currencyQuoteRepository.save(quote);
             });
         }
         return quotes;
     }
-
 }
