@@ -1,7 +1,7 @@
 # Projeto de Cotação de Moedas com Spring Boot
 
 Este projeto é uma aplicação Spring Boot desenvolvida para interagir
-com a [API de Moedas](URL) e proporcionar funcionalidades relacionadas
+com a [API de Moedas](https://docs.awesomeapi.com.br/api-de-moedas) e proporcionar funcionalidades relacionadas
 à cotação de moedas em tempo real, gerenciamento de usuários
 e manipulação de favoritos.
 
