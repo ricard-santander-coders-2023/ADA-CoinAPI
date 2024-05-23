@@ -12,4 +12,7 @@ public class CurrencyConversionDTO {
   private String toCurrency;
   private BigDecimal amount;
   private BigDecimal convertedAmount;
+
+  public CurrencyConversionDTO() {
+  }
 }
