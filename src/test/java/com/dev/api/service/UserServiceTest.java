@@ -27,34 +27,28 @@ class UserServiceTest {
 
     @Test
     void testCreateUserWithUsernameAndPassword() {
-        // Mocking the userRepository.save() method
         User expectedUser = new User();
         expectedUser.setUsername("test_user");
         expectedUser.setPassword("test_password");
         when(userRepository.save(any(User.class))).thenReturn(expectedUser);
 
-        // Calling the method under test
         User createdUser = userService.createUser("test_user", "test_password");
 
-        // Asserting the result
         assertEquals(expectedUser, createdUser);
     }
 
     @Test
     void testCreateUserWithUserObject() {
-        // Mocking the userRepository.save() method
         User expectedUser = new User();
         expectedUser.setUsername("test_user");
         expectedUser.setPassword("test_password");
         when(userRepository.save(any(User.class))).thenReturn(expectedUser);
 
-        // Calling the method under test
         User user = new User();
         user.setUsername("test_user");
         user.setPassword("test_password");
         User createdUser = userService.createUser(user);
 
-        // Asserting the result
         assertEquals(expectedUser, createdUser);
     }
 }

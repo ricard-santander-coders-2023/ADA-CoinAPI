@@ -30,7 +30,7 @@ public class QuoteControllerTest {
 
     @BeforeEach
     void setUp() {
-        // This method can be used to set up common test data if needed.
+
     }
 
     @Test

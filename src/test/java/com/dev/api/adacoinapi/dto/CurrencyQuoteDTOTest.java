@@ -21,7 +21,6 @@ public class CurrencyQuoteDTOTest {
 
     @Test
     public void testSerialization() throws Exception {
-        // Cria um objeto CurrencyQuoteDTO para teste
         CurrencyQuoteDTO currencyQuoteDTO = new CurrencyQuoteDTO();
         currencyQuoteDTO.setCurrencyCode("USD");
         currencyQuoteDTO.setCurrencyName("Dólar Americano");
@@ -29,10 +28,8 @@ public class CurrencyQuoteDTOTest {
         currencyQuoteDTO.setAsk(new BigDecimal("5.25"));
         currencyQuoteDTO.setTimestamp(Instant.now());
 
-        // Serializa o objeto para JSON
         String json = objectMapper.writeValueAsString(currencyQuoteDTO);
 
-        // Asserts ou verificações adicionais, se necessário
         System.out.println(json);
     }
 }

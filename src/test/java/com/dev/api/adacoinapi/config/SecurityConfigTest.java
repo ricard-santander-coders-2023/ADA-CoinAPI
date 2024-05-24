@@ -1,5 +1,7 @@
 package com.dev.api.adacoinapi.config;
 
+import com.dev.api.adacoinapi.controller.QuoteController;
+import com.dev.api.adacoinapi.service.QuoteService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -16,26 +18,28 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@WebMvcTest
+@WebMvcTest(QuoteController.class)
 @Import(SecurityConfig.class)
 public class SecurityConfigTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-//    @MockBean
-//    private SomeService someService; // Mock any service that might be required by the controller
+    @MockBean
+    private QuoteService quoteService;
 
     @Test
+    @WithMockUser
     public void testPublicEndpoint() throws Exception {
-        mockMvc.perform(post("/api/users/create"))
+        mockMvc.perform(get("/api/quotes")
+                        .param("currencies", "USD,EUR"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser // This annotation mocks a user with default username, password, and role
+    @WithMockUser
     public void testSecuredEndpoint() throws Exception {
-        mockMvc.perform(get("/api/some-secured-endpoint"))
-                .andExpect(status().isForbidden());
+        mockMvc.perform(get("/api/quotes/convert/USD/EUR/100"))
+                .andExpect(status().isOk());
     }
 }

@@ -35,8 +35,7 @@ public class QuoteService {
         return quotes;
     }
 
-    public CurrencyConversionDTO convertCurrency(
-        String fromCurrency, String toCurrency, BigDecimal amount) {
+    public CurrencyConversionDTO convertCurrency(String fromCurrency, String toCurrency, BigDecimal amount) {
         String currencies = fromCurrency + "-" + toCurrency;
         Map<String, CurrencyQuote> response = getQuotes(currencies);
         CurrencyQuote quote = response.get(fromCurrency + toCurrency);
