@@ -14,7 +14,7 @@ export function CoinChart({ selectedCoin, coinValues }: CoinChartProps) {
 
   const fetchHistoricalCoinValues = async (coin: string) => {
     try {
-      const response = await api.get(`daily/${coin}/${chartPeriod}`);
+      const response = await api.get(`${coin}/${chartPeriod}`);
       console.log("API Response:", response.data); // Log API response for debugging
       return response.data;
     } catch (error) {

@@ -10,61 +10,52 @@ interface CoinValuesProps {
 }
 
 export function Converter({ onSelectCoin }: ConverterProps) {
-  const [selectedCoins, setSelectedCoins] = useState<string[]>(["USD", ""]);
+  const [coinOptions, setCoinOptions] = useState<CoinValuesProps>({});
+  const [selectedCoins, setSelectedCoins] = useState<string[]>(["", ""]);
   const [quantity, setQuantity] = useState<number | "">("");
   const [selectedDate, setSelectedDate] = useState<string>("");
-  const [coinValues, setCoinValues] = useState<{ [key: string]: number }>({});
+  const [convertedValue, setConvertedValue] = useState<number | "">("");
+
+  const fetchConvertedValue = async () => {
+    if (selectedCoins[0] && selectedCoins[1] && quantity !== "") {
+      try {
+        const response = await api.get(
+          `/quotes/convert/${selectedCoins[0]}/${selectedCoins[1]}/${quantity}`
+        );
+        const data = response.data;
+        setConvertedValue(data);
+      } catch (error) {
+        console.error("Error fetching converted value:", error);
+      }
+    }
+  };
 
   const handleCoinChange =
-    (index: number) => (event: React.ChangeEvent<HTMLSelectElement>) => {
+    (index: number) => async (event: React.ChangeEvent<HTMLSelectElement>) => {
       const updatedCoins = [...selectedCoins];
       updatedCoins[index] = event.target.value;
       setSelectedCoins(updatedCoins);
       onSelectCoin(event.target.value);
+      if (selectedCoins[0] && selectedCoins[1] && quantity !== "") {
+        await fetchConvertedValue();
+      }
     };
 
   useEffect(() => {
-    const fetchCoinValues = async () => {
+    const fetchCoinTypes = async () => {
       try {
-        const response = await api.get("all");
+        const response = await api.get(
+          "https://economia.awesomeapi.com.br/json/available/uniq"
+        );
         const data = response.data;
-        const coinValues:CoinValuesProps = {};
-        const usdHigh = parseFloat(data.USD.high);
-        for (const coin in data) {
-          if (data[coin].high) {
-            const coinHigh = parseFloat(data[coin].high);
-            coinValues[coin] = coinHigh / usdHigh;
-          }
-          coinValues.BRL = parseFloat(1 / data.USD.high);
-        }
-        setCoinValues(coinValues);
+        setCoinOptions(data);
       } catch (error) {
-        console.error("Error fetching coin values:", error);
+        console.error("Error fetching coin options:", error);
       }
     };
 
-    fetchCoinValues();
+    fetchCoinTypes();
   }, []);
-
-  const fetchCoinInSpecificDate = async () => {
-    try {
-      const formattedDate = selectedDate.split("-").join("");
-      const response = await api.get(
-        `daily/${selectedCoins[0]}?start_date=${formattedDate}&end_date=${formattedDate}`
-      );
-      const data = response.data;
-      const coinValues = {};
-      if (data && data.length > 0) {
-        const coinData = data[0]; // Assuming only one data point for the selected date
-        if (coinData.high) {
-          coinValues[selectedCoins[0]] = parseFloat(coinData.high);
-        }
-      }
-      setCoinValues(coinValues);
-    } catch (error) {
-      console.error("Error fetching coin values for selected date:", error);
-    }
-  };
 
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
@@ -76,8 +67,30 @@ export function Converter({ onSelectCoin }: ConverterProps) {
   ) => {
     const newSelectedDate = event.target.value;
     setSelectedDate(newSelectedDate);
-    await fetchCoinInSpecificDate();
   };
+
+  useEffect(() => {
+    const fetchConvertedValue = async () => {
+      if (
+        selectedCoins[0] !== "" &&
+        selectedCoins[1] !== "" &&
+        quantity !== ""
+      ) {
+        console.log("SELECTED COINS ===> ", selectedCoins)
+        try {
+          const response = await api.get(
+            `/convert/${selectedCoins[0]}/${selectedCoins[1]}/${quantity}`
+          );
+          const data = response.data;
+          setConvertedValue(data); // Assuming the API returns the converted value directly
+        } catch (error) {
+          console.error("Error fetching converted value:", error);
+        }
+      }
+    };
+
+    fetchConvertedValue();
+  }, [selectedCoins[0], selectedCoins[1], quantity]);
 
   return (
     <div className="w-1/2 px-4 pt-5 border rounded-lg border-slate-500">
@@ -88,9 +101,10 @@ export function Converter({ onSelectCoin }: ConverterProps) {
             onChange={handleCoinChange(0)}
             className="border border-gray-300 rounded-md px-3 py-2 mr-2 text-slate-800"
           >
-            {Object.keys(coinValues).map((coin) => (
-              <option key={coin} value={coin}>
-                {coin}
+            <option value="">Select coin</option>
+            {Object.entries(coinOptions).map(([symbol, name]) => (
+              <option key={symbol} value={symbol}>
+                {symbol} - {name}
               </option>
             ))}
           </select>
@@ -108,23 +122,17 @@ export function Converter({ onSelectCoin }: ConverterProps) {
             onChange={handleCoinChange(1)}
             className="border border-gray-300 rounded-md px-3 py-2 mr-2 text-slate-800"
           >
-            {Object.keys(coinValues).map((coin) => (
-              <option key={coin} value={coin}>
-                {coin}
+            <option value="">Select coin</option>
+            {Object.entries(coinOptions).map(([symbol, name]) => (
+              <option key={symbol} value={symbol}>
+                {symbol} - {name}
               </option>
             ))}
           </select>
           <input
             type="number"
             readOnly
-            value={
-              quantity !== ""
-                ? (
-                    (quantity * (coinValues[selectedCoins[0]] || 1)) /
-                    (coinValues[selectedCoins[1]] || 1)
-                  ).toFixed(6)
-                : ""
-            }
+            value={convertedValue}
             className="border border-gray-300 rounded-md px-3 py-2 mr-2"
           />
         </div>

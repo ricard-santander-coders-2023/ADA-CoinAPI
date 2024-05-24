@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from "react";
 
 export function Navbar() {
-  const cycleInfoData = ["26-04-2024: Dolar $5.10", "Queda Bitcoin 0,04%"];
+  const cycleInfoData = [
+    "Dolar hits $5.10",
+    "Bitcoin drops 0.04%",
+    "Stock hit new heights",
+    "Gold prices surge",
+    "Tech sector slumps on NASDAQ",
+    "Oil prices record high",
+    "Investors safe-haven assets",
+    "Crypto market fluctuates wildly",
+    "Reserve raises interest rates",
+  ];
+
   const [currentInfoIndex, setCurrentInfoIndex] = useState(0);
 
   const cycleInfo = () => {
