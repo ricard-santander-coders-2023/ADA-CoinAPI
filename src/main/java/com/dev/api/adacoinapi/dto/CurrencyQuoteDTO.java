@@ -4,9 +4,13 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 import com.dev.api.adacoinapi.model.CurrencyQuote;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CurrencyQuoteDTO {
 
 

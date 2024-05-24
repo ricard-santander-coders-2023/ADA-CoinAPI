@@ -13,5 +13,4 @@ public class CurrencyConversionDTO {
   private BigDecimal amount;
   private BigDecimal convertedAmount;
 
-
 }

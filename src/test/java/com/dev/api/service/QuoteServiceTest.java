@@ -2,9 +2,11 @@ package com.dev.api.service;
 
 import com.dev.api.adacoinapi.dto.CurrencyConversionDTO;
 import com.dev.api.adacoinapi.model.CurrencyQuote;
+import com.dev.api.adacoinapi.repository.CurrencyQuoteRepository;
 import com.dev.api.adacoinapi.service.QuoteService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.core.ParameterizedTypeReference;
@@ -28,17 +30,20 @@ import static org.mockito.Mockito.when;
 
 class QuoteServiceTest {
 
-    private QuoteService quoteService;
+    @Mock
+    private CurrencyQuoteRepository currencyQuoteRepository;
 
     @Mock
     private RestTemplate restTemplate;
 
+    @InjectMocks
+    private QuoteService quoteService;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        quoteService = new QuoteService(restTemplate);
+        quoteService = new QuoteService(restTemplate, currencyQuoteRepository);
     }
-
 
     @Test
     void testGetRealTimeQuotes() {
