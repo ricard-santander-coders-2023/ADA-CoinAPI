@@ -4,6 +4,7 @@ import com.dev.api.adacoinapi.dto.CurrencyConversionDTO;
 import com.dev.api.adacoinapi.model.CurrencyQuote;
 import com.dev.api.adacoinapi.service.QuoteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -27,6 +28,7 @@ public class QuoteController {
   }
 
   @GetMapping("/convert/{fromCurrency}/{toCurrency}/{amount}")
+  @PreAuthorize("hasRole('USER')")
   public CurrencyConversionDTO convertCurrency(
       @PathVariable String fromCurrency,
       @PathVariable String toCurrency,
