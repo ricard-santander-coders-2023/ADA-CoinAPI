@@ -19,7 +19,6 @@ public class AppConfigTest {
 
     @Test
     public void testRestTemplateBean() {
-        // Given - Context is already loaded by @SpringBootTest
 
         // When
         RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
