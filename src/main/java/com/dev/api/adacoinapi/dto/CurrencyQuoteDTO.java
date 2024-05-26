@@ -25,6 +25,11 @@ public class CurrencyQuoteDTO {
     this.id = quote.getId();
     this.currencyCode = quote.getCurrencyCode();
     this.currencyName = quote.getCurrencyName();
+    this.bid = quote.getBid();
+    this.ask = quote.getAsk();
+    this.timestamp = quote.getTimestamp();
   }
+
+
 
 }

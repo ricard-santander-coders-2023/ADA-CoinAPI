@@ -87,7 +87,6 @@ class QuoteServiceTest {
 
         ResponseEntity<Map<String, Map<String, Object>>> responseEntity = ResponseEntity.ok(quotes);
 
-        // Mock da resposta da api
         when(restTemplate.exchange(any(String.class), eq(HttpMethod.GET), any(),
                 eq(new ParameterizedTypeReference<Map<String, Map<String, Object>>>() {})))
                 .thenReturn(responseEntity);
